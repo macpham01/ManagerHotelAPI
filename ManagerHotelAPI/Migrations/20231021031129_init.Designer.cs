@@ -4,14 +4,16 @@ using ManagerHotelAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ManagerHotelAPI.Migrations
 {
     [DbContext(typeof(HotelManagerContext))]
-    partial class HotelManagerContextModelSnapshot : ModelSnapshot
+    [Migration("20231021031129_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -145,7 +147,8 @@ namespace ManagerHotelAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("LocationId")
                         .HasMaxLength(36)
@@ -215,29 +218,6 @@ namespace ManagerHotelAPI.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "6db66d77-447f-4342-8e3e-b216fee78a64",
-                            ConcurrencyStamp = "1",
-                            Name = "Admin",
-                            NormalizedName = "Admin"
-                        },
-                        new
-                        {
-                            Id = "4e862d32-30ac-4de9-aad5-e6ac47812753",
-                            ConcurrencyStamp = "2",
-                            Name = "User",
-                            NormalizedName = "User"
-                        },
-                        new
-                        {
-                            Id = "c9cb71ae-3c99-44b1-8847-047f30791cae",
-                            ConcurrencyStamp = "3",
-                            Name = "Boss",
-                            NormalizedName = "Boss"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

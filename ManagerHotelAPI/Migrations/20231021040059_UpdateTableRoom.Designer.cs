@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManagerHotelAPI.Migrations
 {
     [DbContext(typeof(HotelManagerContext))]
-    [Migration("20230929070248_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20231021040059_UpdateTableRoom")]
+    partial class UpdateTableRoom
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,6 +21,40 @@ namespace ManagerHotelAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.17")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("ManagerHotelAPI.Models.Comment", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(36)
+                        .IsUnicode(false)
+                        .HasColumnType("char(36)")
+                        .IsFixedLength(true);
+
+                    b.Property<bool?>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("RoomId")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .IsUnicode(false)
+                        .HasColumnType("char(36)")
+                        .IsFixedLength(true);
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Comment");
+                });
 
             modelBuilder.Entity("ManagerHotelAPI.Models.Location", b =>
                 {
@@ -184,6 +218,29 @@ namespace ManagerHotelAPI.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "5c5730cc-8021-4814-bc5a-9f7bc48aa587",
+                            ConcurrencyStamp = "1",
+                            Name = "Admin",
+                            NormalizedName = "Admin"
+                        },
+                        new
+                        {
+                            Id = "0c7589a2-f6c0-40aa-9d2d-055221f7df9c",
+                            ConcurrencyStamp = "2",
+                            Name = "User",
+                            NormalizedName = "User"
+                        },
+                        new
+                        {
+                            Id = "23229cbf-eec2-4ea2-bf6d-1a484d1157a5",
+                            ConcurrencyStamp = "3",
+                            Name = "Boss",
+                            NormalizedName = "Boss"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -98,8 +98,8 @@ namespace ManagerHotelAPI
                 options.RequireHttpsMetadata = false;
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    ValidateIssuer = false,     // true khi khai báo new Claim(JwtRegisteredClaimNames.Aud, _configuration["JwtBearerTokenSettings:Audience"])
-                    ValidateAudience = false,   // true khi khai báo new Claim(JwtRegisteredClaimNames.Iss, _configuration["JwtBearerTokenSettings:Issuer"])
+                    ValidateIssuer = true,     // true khi khai báo new Claim(JwtRegisteredClaimNames.Aud, _configuration["JwtBearerTokenSettings:Audience"])
+                    ValidateAudience = true,   // true khi khai báo new Claim(JwtRegisteredClaimNames.Iss, _configuration["JwtBearerTokenSettings:Issuer"])
                     ValidAudience = Configuration["JwtBearerTokenSettings:Audience"],
                     ValidIssuer = Configuration["JwtBearerTokenSettings:Issuer"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtBearerTokenSettings:SecretKey"]))

@@ -102,8 +102,8 @@ namespace ManagerHotelAPI.Controllers
                     {
                         new Claim(ClaimTypes.Name, user.UserName),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                        //new Claim(JwtRegisteredClaimNames.Aud, _configuration["JwtBearerTokenSettings:Audience"]),
-                        //new Claim(JwtRegisteredClaimNames.Iss, _configuration["JwtBearerTokenSettings:Issuer"])
+                        new Claim(JwtRegisteredClaimNames.Aud, _configuration["JwtBearerTokenSettings:Audience"]),
+                        new Claim(JwtRegisteredClaimNames.Iss, _configuration["JwtBearerTokenSettings:Issuer"])
                     };
                     var userRoles = await _userManager.GetRolesAsync(user);
                     foreach (var role in userRoles)
@@ -139,8 +139,8 @@ namespace ManagerHotelAPI.Controllers
                 var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtBearerTokenSettings:SecretKey"]));
 
                 var token = new JwtSecurityToken(
-                    //issuer: _configuration["JwtBearerTokenSettings:Issuer"],
-                    //audience: _configuration["JwtBearerTokenSettings:Audience"],
+                    issuer: _configuration["JwtBearerTokenSettings:Issuer"],
+                    audience: _configuration["JwtBearerTokenSettings:Audience"],
                     expires: DateTime.UtcNow.AddHours(1),
                     claims: authClaims,
                     signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)

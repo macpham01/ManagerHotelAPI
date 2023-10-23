@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManagerHotelAPI.Migrations
 {
     [DbContext(typeof(HotelManagerContext))]
-    [Migration("20230929075631_AddRoles")]
+    [Migration("20231021031911_AddRoles")]
     partial class AddRoles
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,6 +21,40 @@ namespace ManagerHotelAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.17")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("ManagerHotelAPI.Models.Comment", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(36)
+                        .IsUnicode(false)
+                        .HasColumnType("char(36)")
+                        .IsFixedLength(true);
+
+                    b.Property<bool?>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("RoomId")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .IsUnicode(false)
+                        .HasColumnType("char(36)")
+                        .IsFixedLength(true);
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Comment");
+                });
 
             modelBuilder.Entity("ManagerHotelAPI.Models.Location", b =>
                 {
@@ -188,21 +222,21 @@ namespace ManagerHotelAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "69eb14cf-3613-4270-8524-6df348eac72b",
+                            Id = "2c3ff2f5-8580-41c1-881d-16d037bc860e",
                             ConcurrencyStamp = "1",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "4f62dbcc-f123-4845-9d1e-c83d335ff067",
+                            Id = "75ca5194-9a73-4ca0-9fbc-d1f64fcd5158",
                             ConcurrencyStamp = "2",
                             Name = "User",
                             NormalizedName = "User"
                         },
                         new
                         {
-                            Id = "59867f4f-a5e5-4eb6-8f26-85cbae432ab8",
+                            Id = "e78cbed2-69a7-4aeb-a478-c38d3cc19165",
                             ConcurrencyStamp = "3",
                             Name = "Boss",
                             NormalizedName = "Boss"

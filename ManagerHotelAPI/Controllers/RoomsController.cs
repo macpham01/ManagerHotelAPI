@@ -26,8 +26,8 @@ namespace ManagerHotelAPI.Controllers
         }
 
         // GET: api/Rooms
-        [Authorize(Roles = "User, Admin, Boss")]
         [HttpGet]
+        [Authorize(Roles = "User")]
         public async Task<ActionResult<IEnumerable<Room>>> GetRooms()
         {
             //var result = _context.Rooms.Join(_context.Locations, r => r.LocationId, l => l.Id, (r, l)=>new {r, l});
@@ -87,8 +87,11 @@ namespace ManagerHotelAPI.Controllers
         // POST: api/Rooms
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Room>> PostRoom(Room room)
+        public async Task<ActionResult<Room>> PostRoom(RoomDTO roomDTO)
         {
+            var room = _mapper.Map<Room>(roomDTO);
+            room.Id = Guid.NewGuid().ToString();
+            room.CreatedDate = DateTime.UtcNow;
             _context.Rooms.Add(room);
             try
             {
