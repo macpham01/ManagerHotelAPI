@@ -6,18 +6,22 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ManagerHotelAPI.Models;
+using ManagerHotelAPI.DTO;
+using AutoMapper;
 
 namespace ManagerHotelAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class LocationsController : ControllerBase
     {
         private readonly HotelManagerContext _context;
+        private readonly IMapper _mapper;
 
-        public LocationsController(HotelManagerContext context)
+        public LocationsController(HotelManagerContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/Locations
@@ -51,7 +55,7 @@ namespace ManagerHotelAPI.Controllers
             {
                 return locations;
             }
-            return NotFound();
+            return NoContent();
 
         }
 
@@ -89,26 +93,21 @@ namespace ManagerHotelAPI.Controllers
         // POST: api/Locations
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Location>> PostLocation(Location location)
+        public async Task<ActionResult<Location>> PostLocation(LocationDTO locationDTO)
         {
-            _context.Locations.Add(location);
             try
             {
+                var location = _mapper.Map<Location>(locationDTO);
+                _context.Locations.Add(location);
                 await _context.SaveChangesAsync();
+                return StatusCode(201, location);
             }
-            catch (DbUpdateException)
+            catch (Exception ex)
             {
-                if (LocationExists(location.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
-
-            return CreatedAtAction("GetLocation", new { id = location.Id }, location);
+            
+            
         }
 
         // DELETE: api/Locations/5

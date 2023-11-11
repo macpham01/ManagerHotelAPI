@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ManagerHotelAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class RoomsController : ControllerBase
     {

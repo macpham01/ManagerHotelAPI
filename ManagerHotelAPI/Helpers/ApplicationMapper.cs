@@ -14,6 +14,7 @@ namespace ManagerHotelAPI.Helpers
         {
             CreateMap<Room, RoomDTO>().ReverseMap();
             CreateMap<Location, RoomDTO>().ReverseMap();
+            CreateMap<Location, LocationDTO>().ReverseMap();
         }
     }
 }
