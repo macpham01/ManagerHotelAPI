@@ -27,61 +27,66 @@ namespace ManagerHotelAPI.Controllers
 
         // GET: api/Rooms
         [HttpGet]
-        [Authorize(Roles = "User")]
-        public async Task<ActionResult<IEnumerable<Room>>> GetRooms()
+
+        public ActionResult<IEnumerable<Room>> GetRooms()
         {
-            //var result = _context.Rooms.Join(_context.Locations, r => r.LocationId, l => l.Id, (r, l)=>new {r, l});
-            return await _context.Rooms.ToListAsync();
+            var listRoomWithLocation = _context.Rooms.ToList().Join(_context.Locations.ToList(), room => room.LocationId, location => location.Id, (room, location) =>
+            {
+                room.Location = location;
+                return room;
+            }
+            );
+            return Ok(listRoomWithLocation);
         }
 
         // GET: api/Rooms/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<RoomDTO>> GetRoom(string id)
+        public async Task<ActionResult<Room>> GetRoom(string id)
         {
             var room = await _context.Rooms.FindAsync(id);
-
             if (room != null)
             {
-                var locationByRoom = await _context.Locations.FindAsync(room.LocationId);
-                var roomDTO = _mapper.Map<RoomDTO>(room);
-                roomDTO.LocationName = locationByRoom?.LocationName;
-                roomDTO.Country = locationByRoom?.Country;
-                roomDTO.District = locationByRoom?.District;
-                return roomDTO;
+                var location = await _context.Locations.FindAsync(room.LocationId);
+                room.Location = location;
+                return room;
             }
+            return NoContent();
+        }
 
-                return NotFound();
+        // GET: api/Rooms??locationId
+        [HttpGet("search")]
+        public async Task<ActionResult<Room>> GetRoomByLocationId([FromQuery] string locationId)
+        {
+            if (locationId != null)
+            {
+                var rooms = await _context.Rooms.Where(r => r.LocationId == locationId).ToListAsync();
+                return Ok(rooms);
+            }
+            return NoContent();
         }
 
         // PUT: api/Rooms/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRoom(string id, Room room)
+        public async Task<IActionResult> PutRoom(string id, RoomDTO roomDTO)
         {
-            if (id != room.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(room).State = EntityState.Modified;
-
             try
             {
+                var room = await _context.Rooms.FindAsync(id);
+                if (room == null)
+                {
+                    return BadRequest();
+                }
+                _mapper.Map(roomDTO, room);
+                _context.Rooms.Update(room);
                 await _context.SaveChangesAsync();
+                return Ok();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!RoomExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
 
-            return NoContent();
+                throw;
+            }
         }
 
         // POST: api/Rooms
@@ -89,27 +94,18 @@ namespace ManagerHotelAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Room>> PostRoom(RoomDTO roomDTO)
         {
-            var room = _mapper.Map<Room>(roomDTO);
-            room.Id = Guid.NewGuid().ToString();
-            room.CreatedDate = DateTime.UtcNow;
-            _context.Rooms.Add(room);
+            
             try
             {
+                var room = _mapper.Map<Room>(roomDTO);
+                _context.Rooms.Add(room);
                 await _context.SaveChangesAsync();
+                return CreatedAtAction("GetRoom", new { id = room.Id }, room);
             }
-            catch (DbUpdateException)
+            catch (Exception ex)
             {
-                if (RoomExists(room.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
-
-            return CreatedAtAction("GetRoom", new { id = room.Id }, room);
         }
 
         [HttpPut("increaseView/{id}")]
@@ -129,6 +125,7 @@ namespace ManagerHotelAPI.Controllers
 
         // DELETE: api/Rooms/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteRoom(string id)
         {
             var room = await _context.Rooms.FindAsync(id);

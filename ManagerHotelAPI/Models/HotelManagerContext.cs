@@ -102,7 +102,7 @@ namespace ManagerHotelAPI.Models
 
                 entity.Property(e => e.EndDate).HasColumnType("date");
 
-                entity.Property(e => e.FullName)
+                entity.Property(e => e.RoomName)
                     .IsRequired()
                     .HasMaxLength(50);
 
