@@ -36,6 +36,8 @@ namespace ManagerHotelAPI.Models
         public int? Guests { get; set; }
         public int? Bedroom { get; set; }
         public int? Bath { get; set; }
+        public int? Bed { get; set; }
+        public int? QuantityRoom { get; set; }
         public Location Location { get; set; }
 
     }

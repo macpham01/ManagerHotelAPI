@@ -84,7 +84,7 @@ namespace ManagerHotelAPI
             services.AddAutoMapper(typeof(Program));
 
             // For Identity
-            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<HotelManagerContext>().AddDefaultTokenProviders();
+            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<HotelManagerContext>().AddDefaultTokenProviders();
 
             // Adding Authentication
             services.AddAuthentication(option =>

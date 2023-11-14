@@ -1,4 +1,5 @@
 ﻿using ManagerHotelAPI.DTO;
+using ManagerHotelAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,15 +15,15 @@ using System.Threading.Tasks;
 
 namespace ManagerHotelAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class AuthenticationsController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
 
-        public AuthenticationsController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        public AuthenticationsController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -30,7 +31,7 @@ namespace ManagerHotelAPI.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterUser registerUser, string role)
+        public async Task<IActionResult> Register([FromBody] RegisterUser registerUser)
         {
             try
             {
@@ -45,14 +46,18 @@ namespace ManagerHotelAPI.Controllers
                     });
                 }
 
+                if (registerUser.Role == null) return BadRequest();
+
                 // Add the User in the database
-                IdentityUser user = new()
+                User user = new()
                 {
+                    FullName = registerUser.FullName,
                     Email = registerUser.Email,
                     SecurityStamp = Guid.NewGuid().ToString(),
-                    UserName = registerUser.UserName
+                    UserName = registerUser.Email,
+                    PhoneNumber = registerUser.PhoneNumber,
                 };
-                if (await _roleManager.RoleExistsAsync(role))
+                if (await _roleManager.RoleExistsAsync(registerUser.Role))
                 {
                     var result = await _userManager.CreateAsync(user, registerUser.Password);
                     if (!result.Succeeded)
@@ -60,12 +65,12 @@ namespace ManagerHotelAPI.Controllers
                         return StatusCode(StatusCodes.Status500InternalServerError, new Response
                         {
                             Status = "Error",
-                            Message = "Có lỗi trong quá trình xử lý"
+                            Message = "Mật khẩu phải bao gồm 1 chữ hoa, 1 ký tự đặc biệt và 1 chữ số"
                         });
                     }
 
                     // Add role to the user...
-                    await _userManager.AddToRoleAsync(user, role);
+                    await _userManager.AddToRoleAsync(user, registerUser.Role);
                     return StatusCode(StatusCodes.Status201Created, new Response
                     {
                         Status = "Success",
@@ -115,7 +120,8 @@ namespace ManagerHotelAPI.Controllers
                     return Ok(new
                     {
                         token = new JwtSecurityTokenHandler().WriteToken(jwtToken),
-                        expiration = jwtToken.ValidTo
+                        expiration = jwtToken.ValidTo,
+                        User = user
                     });
                 }
                 //return Unauthorized();

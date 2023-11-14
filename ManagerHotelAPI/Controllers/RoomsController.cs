@@ -60,7 +60,12 @@ namespace ManagerHotelAPI.Controllers
             if (locationId != null)
             {
                 var rooms = await _context.Rooms.Where(r => r.LocationId == locationId).ToListAsync();
-                return Ok(rooms);
+                var listRoomWithLocation = rooms.Join(_context.Locations.ToList(), room => room.LocationId, location => location.Id, (room, location) =>
+                {
+                    room.Location = location;
+                    return room;
+                });
+                return Ok(listRoomWithLocation);
             }
             return NoContent();
         }

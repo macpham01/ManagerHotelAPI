@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace ManagerHotelAPI.Models
 {
-    public partial class HotelManagerContext : IdentityDbContext<IdentityUser>
+    public partial class HotelManagerContext : IdentityDbContext<User>
     {
         public HotelManagerContext()
         {
@@ -27,7 +27,7 @@ namespace ManagerHotelAPI.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=21333333331148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("Server=ADMINISTRATOR\\SQLEXPRESS;Database=HotelManager;Trusted_Connection=True;");
             }
         }
@@ -134,6 +134,9 @@ namespace ManagerHotelAPI.Models
                 entity.Property(e => e.Tag)
                     .HasMaxLength(20)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Bed).IsRequired(false);
+                entity.Property(e => e.QuantityRoom).IsRequired(false);
             });
 
             OnModelCreatingPartial(modelBuilder);

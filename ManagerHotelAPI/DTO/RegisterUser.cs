@@ -8,8 +8,8 @@ namespace ManagerHotelAPI.DTO
 {
     public class RegisterUser
     {
-        [Required(ErrorMessage ="User name is required!")]
-        public string UserName { get; set; }
+        [Required(ErrorMessage ="FullName is required!")]
+        public string FullName { get; set; }
 
         [EmailAddress]
         [Required(ErrorMessage = "Email is required!")]
@@ -17,5 +17,8 @@ namespace ManagerHotelAPI.DTO
 
         [Required(ErrorMessage = "Password is required!")]
         public string Password { get; set; }
+
+        public string PhoneNumber { get; set; }
+        public string Role { get; set; }
     }
 }
