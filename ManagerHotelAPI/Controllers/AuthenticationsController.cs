@@ -74,7 +74,8 @@ namespace ManagerHotelAPI.Controllers
                     return StatusCode(StatusCodes.Status201Created, new Response
                     {
                         Status = "Success",
-                        Message = "Tạo tài khoản thành công"
+                        Message = "Tạo tài khoản thành công",
+                        User = user
                     });
 
                 }
@@ -117,10 +118,12 @@ namespace ManagerHotelAPI.Controllers
                     }
 
                     var jwtToken = GetToken(authClaims);
-                    return Ok(new
+                    return Ok(new Response
                     {
-                        token = new JwtSecurityTokenHandler().WriteToken(jwtToken),
-                        expiration = jwtToken.ValidTo,
+                        Status = "Success",
+                        Message = "Đăng nhập thành công",
+                        Token = new JwtSecurityTokenHandler().WriteToken(jwtToken),
+                        Expiration = jwtToken.ValidTo,
                         User = user
                     });
                 }
