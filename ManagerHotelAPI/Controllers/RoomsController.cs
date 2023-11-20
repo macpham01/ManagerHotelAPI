@@ -27,7 +27,6 @@ namespace ManagerHotelAPI.Controllers
 
         // GET: api/Rooms
         [HttpGet]
-
         public ActionResult<IEnumerable<Room>> GetRooms()
         {
             var listRoomWithLocation = _context.Rooms.ToList().Join(_context.Locations.ToList(), room => room.LocationId, location => location.Id, (room, location) =>

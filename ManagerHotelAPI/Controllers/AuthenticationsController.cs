@@ -1,10 +1,12 @@
 ﻿using ManagerHotelAPI.DTO;
 using ManagerHotelAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -139,6 +141,38 @@ namespace ManagerHotelAPI.Controllers
 
                 throw;
             }
+        }
+
+        [HttpPost("change-password")]
+        [Authorize(Roles = "User")]
+
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePassword model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email); 
+            if (user == null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new Response
+                {
+                    Status = "Error",
+                    Message = "Người dùng không tồn tại"
+                });
+            }
+
+            var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+            if (result.Succeeded)
+            {
+                return Ok(new Response
+                {
+                    Status = "Success",
+                    Message = "Thay đổi mật khẩu thành công",
+                });
+            }
+
+            return BadRequest(new Response
+            {
+                Status = "Error",
+                Message = "Người dùng không tồn tại"
+            });
         }
 
         private JwtSecurityToken GetToken(List<Claim> authClaims)
