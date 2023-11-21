@@ -1,4 +1,5 @@
-﻿using ManagerHotelAPI.DTO;
+﻿using AutoMapper;
+using ManagerHotelAPI.DTO;
 using ManagerHotelAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -24,12 +25,15 @@ namespace ManagerHotelAPI.Controllers
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
 
-        public AuthenticationsController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+
+        public AuthenticationsController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IMapper mapper)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
+            _mapper = mapper;
         }
 
         [HttpPost("register")]
@@ -173,6 +177,48 @@ namespace ManagerHotelAPI.Controllers
                 Status = "Error",
                 Message = "Người dùng không tồn tại"
             });
+        }
+
+        [HttpPost("change-profile")]
+        [Authorize(Roles = "User")]
+
+        public async Task<IActionResult> ChangeProfile([FromBody] EditUser model)
+        {
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user == null)
+                {
+                    return StatusCode(StatusCodes.Status400BadRequest, new Response
+                    {
+                        Status = "Error",
+                        Message = "Người dùng không tồn tại"
+                    });
+                }
+                _mapper.Map(model, user);
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    return Ok(new Response
+                    {
+                        Status = "Success",
+                        Message = "Cập nhật dữ liệu thành công",
+                    });
+                }
+                else
+                {
+                    return BadRequest(new Response
+                    {
+                        Status = "Error",
+                        Message = "Cập nhật dữ liệu thất bại",
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+            
         }
 
         private JwtSecurityToken GetToken(List<Claim> authClaims)
