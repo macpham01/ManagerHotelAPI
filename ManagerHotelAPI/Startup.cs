@@ -119,6 +119,7 @@ namespace ManagerHotelAPI
             }
             app.UseCors("MyPolicy");    // Sử dụng service cho phép sử dụng tài nguyên
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
             app.UseRouting();
 

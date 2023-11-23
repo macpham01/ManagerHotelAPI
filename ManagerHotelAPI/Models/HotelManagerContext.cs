@@ -22,6 +22,7 @@ namespace ManagerHotelAPI.Models
         public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<Location> Locations { get; set; }
         public virtual DbSet<Room> Rooms { get; set; }
+        public virtual DbSet<Booking> Bookings { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -36,7 +37,36 @@ namespace ManagerHotelAPI.Models
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
+            modelBuilder.Entity<Booking>(entity =>
+            {
+                entity.ToTable("Booking");
 
+                entity.Property(e => e.Id)
+                    .HasMaxLength(36)
+                    .IsUnicode(false)
+                    .IsFixedLength(true);
+
+                entity.Property(e => e.RoomId)
+                 .HasMaxLength(36)
+                 .IsUnicode(false)
+                 .IsFixedLength(true);
+
+                entity.Property(e => e.EmailUser)
+                .IsRequired()
+                .HasMaxLength(256);
+
+                entity.Property(e => e.BookingDate).HasColumnType("date");
+
+                entity.Property(e => e.EndDate).HasColumnType("date");
+
+                entity.Property(e => e.CreatedBy).HasMaxLength(50);
+
+                entity.Property(e => e.CreatedDate).HasColumnType("date");
+
+                entity.Property(e => e.ModifiedBy).HasMaxLength(50);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("date");
+            });
             modelBuilder.Entity<Comment>(entity =>
             {
                 entity.ToTable("Comment");

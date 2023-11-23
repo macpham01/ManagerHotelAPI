@@ -33,8 +33,7 @@ namespace ManagerHotelAPI.Controllers
             {
                 room.Location = location;
                 return room;
-            }
-            );
+            });
             return Ok(listRoomWithLocation);
         }
 

@@ -11,6 +11,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -26,7 +27,6 @@ namespace ManagerHotelAPI.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
-
 
         public AuthenticationsController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IMapper mapper)
         {
@@ -147,7 +147,8 @@ namespace ManagerHotelAPI.Controllers
             }
         }
 
-        [HttpPost("change-password")]
+
+        [HttpPut("change-password")]
         [Authorize(Roles = "User")]
 
         public async Task<IActionResult> ChangePassword([FromBody] ChangePassword model)
@@ -179,10 +180,10 @@ namespace ManagerHotelAPI.Controllers
             });
         }
 
-        [HttpPost("change-profile")]
+        [HttpPut("change-profile")]
         [Authorize(Roles = "User")]
 
-        public async Task<IActionResult> ChangeProfile([FromBody] EditUser model)
+        public async Task<IActionResult> ChangeProfile([FromForm] EditUser model)
         {
             try
             {
@@ -195,6 +196,16 @@ namespace ManagerHotelAPI.Controllers
                         Message = "Người dùng không tồn tại"
                     });
                 }
+                if (model.FileAvatar != null && model.FileAvatar.Length > 0)
+                {
+                    string uploadDirectory = "wwwroot/images/"; // Đường dẫn tương đối từ thư mục gốc
+                    string filePath = Path.Combine(uploadDirectory, model.FileAvatar.FileName);
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        model.FileAvatar.CopyTo(stream);
+                    }
+                    model.Avatar = Path.Combine(_configuration["Host:Development"], "images", model.FileAvatar.FileName);
+                }
                 _mapper.Map(model, user);
                 var result = await _userManager.UpdateAsync(user);
                 if (result.Succeeded)
@@ -203,7 +214,9 @@ namespace ManagerHotelAPI.Controllers
                     {
                         Status = "Success",
                         Message = "Cập nhật dữ liệu thành công",
-                    });
+                        User = user,
+                        Token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "")
+                    }) ;
                 }
                 else
                 {

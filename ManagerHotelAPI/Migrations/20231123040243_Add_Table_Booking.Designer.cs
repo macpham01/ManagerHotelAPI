@@ -4,14 +4,16 @@ using ManagerHotelAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ManagerHotelAPI.Migrations
 {
     [DbContext(typeof(HotelManagerContext))]
-    partial class HotelManagerContextModelSnapshot : ModelSnapshot
+    [Migration("20231123040243_Add_Table_Booking")]
+    partial class Add_Table_Booking
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,9 +54,6 @@ namespace ManagerHotelAPI.Migrations
 
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("date");
-
-                    b.Property<string>("Note")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RoomId")
                         .IsRequired()
@@ -350,21 +349,21 @@ namespace ManagerHotelAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "24c36dc8-469e-4ecc-88bc-61913d06108d",
+                            Id = "607e559a-4210-410f-a070-1414b6ca6f3a",
                             ConcurrencyStamp = "1",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "27235881-71ea-449e-8fd8-a6ed3c43f4dd",
+                            Id = "ed2d6404-18c2-4a1f-b694-f2575887e427",
                             ConcurrencyStamp = "2",
                             Name = "User",
                             NormalizedName = "User"
                         },
                         new
                         {
-                            Id = "1cab2010-9d1e-4cab-9080-6c63a4a6fa69",
+                            Id = "64dd9620-8deb-4e2d-bb9b-2f2def52013c",
                             ConcurrencyStamp = "3",
                             Name = "Boss",
                             NormalizedName = "Boss"
