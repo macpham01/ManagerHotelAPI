@@ -149,8 +149,7 @@ namespace ManagerHotelAPI.Models
 
                 entity.Property(e => e.Price)
                     .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
+                    .HasColumnType("int");
 
                 entity.Property(e => e.RoomEmail)
                     .HasMaxLength(50)

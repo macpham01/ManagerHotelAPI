@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ManagerHotelAPI.DTO;
 using ManagerHotelAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -24,6 +25,7 @@ namespace ManagerHotelAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> CreateBooking(BookingDTO bookingDTO)
         {
             try

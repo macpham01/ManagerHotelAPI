@@ -14,9 +14,9 @@ namespace ManagerHotelAPI.Models
         public DateTime? BookingDate { get; set; }
         public DateTime? EndDate { get; set; }
         public DateTime? CreatedDate { get; set; } = DateTime.UtcNow;
-        public string CreatedBy { get; set; } = "Canhvd";
+        public string CreatedBy { get; set; } = "CanhVD";
         public DateTime? ModifiedDate { get; set; } = DateTime.UtcNow;
-        public string ModifiedBy { get; set; } = "Canhvd";
+        public string ModifiedBy { get; set; } = "CanhVD";
         public string Note { get; set; }
     }
 }
