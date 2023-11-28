@@ -13,5 +13,6 @@ namespace ManagerHotelAPI.Models
         public string Content { get; set; }
         public DateTime? CreateDate { get; set; }
         public bool? Active { get; set; }
+        public int? Rating { get; set; }
     }
 }
