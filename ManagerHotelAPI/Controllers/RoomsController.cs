@@ -53,19 +53,33 @@ namespace ManagerHotelAPI.Controllers
 
         // GET: api/Rooms??locationId
         [HttpGet("search")]
-        public async Task<ActionResult<Room>> GetRoomByLocationId([FromQuery] string locationId)
+        public async Task<ActionResult<Room>> GetRoomByLocationId([FromQuery] string locationId, [FromQuery] int pageIndex = 1, [FromQuery] int pageSize = 2)
         {
-            if (locationId != null)
+            try
             {
-                var rooms = await _context.Rooms.Where(r => r.LocationId == locationId).ToListAsync();
-                var listRoomWithLocation = rooms.Join(_context.Locations.ToList(), room => room.LocationId, location => location.Id, (room, location) =>
+                if (locationId != null)
                 {
-                    room.Location = location;
-                    return room;
-                });
-                return Ok(listRoomWithLocation);
+                    var rooms =  _context.Rooms.Where(r => r.LocationId == locationId);
+                    int totalPage = (int)Math.Ceiling((double)rooms.Count() / pageSize);
+                    rooms = rooms.Skip((pageIndex-1) * pageSize).Take(pageSize);
+                    var listRoomWithLocation = rooms.ToList().Join(_context.Locations.ToList(), room => room.LocationId, location => location.Id, (room, location) =>
+                    {
+                        room.Location = location;
+                        return room;
+                    });
+                    return Ok(new PageRoom
+                    {
+                        ListRoom = listRoomWithLocation,
+                        TotalPage = totalPage
+                    });
+                }
+                return NoContent();
             }
-            return NoContent();
+            catch (Exception)
+            {
+                return BadRequest();
+                throw;
+            }
         }
 
         // PUT: api/Rooms/5
