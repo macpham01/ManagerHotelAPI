@@ -4,14 +4,16 @@ using ManagerHotelAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ManagerHotelAPI.Migrations
 {
     [DbContext(typeof(HotelManagerContext))]
-    partial class HotelManagerContextModelSnapshot : ModelSnapshot
+    [Migration("20231130094312_UpdateTableComment")]
+    partial class UpdateTableComment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -104,8 +106,6 @@ namespace ManagerHotelAPI.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Comment");
                 });
@@ -355,21 +355,21 @@ namespace ManagerHotelAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "eb6bd53f-50db-44c9-af45-893ceaa6f658",
+                            Id = "d1b46712-599b-40ed-b3de-e79eba6badba",
                             ConcurrencyStamp = "1",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "46911f16-5bc5-4845-9872-3ffa44a08a3d",
+                            Id = "bbbd55fd-8581-4fbe-a6ed-2b7b85b50d9e",
                             ConcurrencyStamp = "2",
                             Name = "User",
                             NormalizedName = "User"
                         },
                         new
                         {
-                            Id = "99a4b0eb-e2a5-43dd-ab06-14e5f30fb7c6",
+                            Id = "e7b77285-aafb-4588-82a8-aeaf5e949eb2",
                             ConcurrencyStamp = "3",
                             Name = "Boss",
                             NormalizedName = "Boss"
@@ -478,17 +478,6 @@ namespace ManagerHotelAPI.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("ManagerHotelAPI.Models.Comment", b =>
-                {
-                    b.HasOne("ManagerHotelAPI.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ManagerHotelAPI.Models.Room", b =>

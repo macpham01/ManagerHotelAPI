@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace ManagerHotelAPI.DTO
 {
-    public class PageRoom
+    public class PageResult<T>
     {
-        public IEnumerable<Room> ListRoom { get; set; }
+        public IEnumerable<T> ListData { get; set; }
         public int TotalPage { get; set; }
     }
 }

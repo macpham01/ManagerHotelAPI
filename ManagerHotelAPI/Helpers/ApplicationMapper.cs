@@ -16,6 +16,7 @@ namespace ManagerHotelAPI.Helpers
             CreateMap<Location, RoomDTO>().ReverseMap();
             CreateMap<Location, LocationDTO>().ReverseMap();
             CreateMap<Booking, BookingDTO>().ReverseMap();
+            CreateMap<Comment, CommentDTO>().ReverseMap();
             CreateMap<User, EditUser>().ReverseMap().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
         }
     }

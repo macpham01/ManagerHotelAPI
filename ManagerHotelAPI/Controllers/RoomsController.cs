@@ -67,9 +67,9 @@ namespace ManagerHotelAPI.Controllers
                         room.Location = location;
                         return room;
                     });
-                    return Ok(new PageRoom
+                    return Ok(new PageResult<Room>
                     {
-                        ListRoom = listRoomWithLocation,
+                        ListData = listRoomWithLocation,
                         TotalPage = totalPage
                     });
                 }
