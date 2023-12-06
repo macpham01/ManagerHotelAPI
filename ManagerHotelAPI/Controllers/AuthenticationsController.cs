@@ -137,13 +137,16 @@ namespace ManagerHotelAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response
                 {
                     Status = "Error",
-                    Message = "Đăng nhập không thành công"
+                    Message = "Tài khoản hoặc mật khẩu không đúng"
                 });
             }
             catch (Exception ex)
             {
-
-                throw;
+                return StatusCode(StatusCodes.Status500InternalServerError, new Response
+                {
+                    Status = "Error",
+                    Message = "Đăng nhập không thành công"
+                });
             }
         }
 

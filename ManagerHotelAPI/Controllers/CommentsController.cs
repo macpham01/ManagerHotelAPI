@@ -45,14 +45,14 @@ namespace ManagerHotelAPI.Controllers
                 {
                     comment.User = user;
                     return comment;
-                });
+                }).OrderByDescending(c => c.CreateDate);
                 return Ok(new PageResult<Comment>
                 {
                     ListData = commentWithUser,
                     TotalPage = totalPage
                 });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
                 throw;
@@ -80,7 +80,7 @@ namespace ManagerHotelAPI.Controllers
                 }
                 else return BadRequest();
             }
-            catch (System.Exception)
+            catch (Exception ex)
             {
 
                 throw;
@@ -88,8 +88,8 @@ namespace ManagerHotelAPI.Controllers
 
         }
 
-        [HttpPut]
-        public async Task<IActionResult> IncreaseLike([FromQuery] string commentId)
+        [HttpPut("increaseLike")]
+        public async Task<IActionResult> IncreaseLike([FromBody] string commentId)
         {
             try
             {
@@ -102,7 +102,7 @@ namespace ManagerHotelAPI.Controllers
                 return Ok();
 
             }
-            catch (System.Exception)
+            catch (Exception ex)
             {
 
                 throw;
