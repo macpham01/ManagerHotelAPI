@@ -13,7 +13,7 @@ namespace ManagerHotelAPI.Models
 
         [Required(ErrorMessage = "Đây là trường bắt buộc")]
         public string RoomName { get; set; }
-
+        public bool IsActive { get; set; } = true;
         public int Price { get; set; }
         public int? Views { get; set; }
         public string Image { get; set; }
