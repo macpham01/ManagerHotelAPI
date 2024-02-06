@@ -18,8 +18,8 @@ namespace ManagerHotelAPI.DTO
         public string LocationId { get; set; }
         public string Tag { get; set; }
         public string Description { get; set; }
-        public int? Guests { get; set; }
         public int? Bedroom { get; set; }
         public int? Bath { get; set; }
+        public int? Bed { get; set; }
     }
 }
