@@ -29,11 +29,12 @@ namespace ManagerHotelAPI.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Room>> GetRooms(bool isActive = true)
         {
-            var listRoomWithLocation = _context.Rooms.Where(r => r.IsActive == isActive).ToList().Join(_context.Locations.ToList(), room => room.LocationId, location => location.Id, (room, location) =>
-            {
-                room.Location = location;
-                return room;
-            });
+            //var listRoomWithLocation = _context.Rooms.Where(r => r.IsActive == isActive).ToList().Join(_context.Locations.ToList(), room => room.LocationId, location => location.Id, (room, location) =>
+            //{
+            //    room.Location = location;
+            //    return room;
+            //});
+            var listRoomWithLocation = _context.Rooms.Include(r => r.Location).ToList();
             return Ok(listRoomWithLocation);
         }
 

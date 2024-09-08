@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
@@ -38,6 +39,8 @@ namespace ManagerHotelAPI.Models
         public int? Bath { get; set; }
         public int? Bed { get; set; }
         public int? QuantityRoom { get; set; }
+
+        [ForeignKey("LocationId")]
         public Location Location { get; set; }
 
     }
